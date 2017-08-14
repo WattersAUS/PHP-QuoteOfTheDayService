@@ -1,12 +1,12 @@
 <?php
 //
-// Program: quoteJSONGenerator.php (2017-08-12) G.J. Watson
+// Program: allQuoteJSONGenerator.php (2017-08-13) G.J. Watson
 //
-// Purpose: build static JSON file for Random Quote
+// Purpose: build static JSON file for All Quotes
 //
 // Date       Version Note
 // ========== ======= ====================================================
-// 2017-08-12 v0.01   First cut of code
+// 2017-08-13 v0.01   First cut of code
 //
 
     set_include_path("<LIB GOES HERE>");
@@ -15,7 +15,7 @@
     require_once("buildQuoteServicesJSON.php");
 
     $version  = "v0.01";
-    $wrksp    = "<WRKSPACE DIR GOES HERE>";more 
+    $wrksp    = "<WRKSPACE DIR GOES HERE>";more
     $cdest    = "<DEST DIR GOES HERE>";
     $filename = "ramdomquote.json";
     $debug    = TRUE;
@@ -30,7 +30,7 @@
         //
         // build the authors JSON file
         //
-        $output = buildRandomQuoteJSON($server);
+        $output = buildAllQuotesJSON($server);
         debugMessage("Writing JSON to file (".jsonFilename($wrksp, $filename).")...");
         if ($file = fopen(jsonFilename($wrksp, $filename), "w")) {
             fputs($file, $output);

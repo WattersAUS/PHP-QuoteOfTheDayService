@@ -1,0 +1,24 @@
+{
+	"version": "v1.01",
+	"generated": "2017-08-14 11:59:15",
+	"service": "activeauthors",
+	"authors": [{
+		"author_id": 1,
+		"author_name": "Baltasar Gracian",
+		"author_period": ""
+	}, {
+		"author_id": 2,
+		"author_name": "Richard Wright",
+		"author_period": ""
+	}, {
+		"author_id": 5,
+		"author_name": "George Carlin",
+		"author_period": ""
+	}, {
+		"author_id": 7,
+		"author_name": "Michael Jordan",
+		"author_period": ""
+	}],
+	"msg": "SUCCESS",
+	"status": 0
+}
