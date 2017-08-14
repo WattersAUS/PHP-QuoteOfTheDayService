@@ -1,0 +1,17 @@
+{
+	"version": "v1.01",
+	"generated": "2017-08-14 12:14:31",
+	"service": "randomquote",
+	"author": {
+		"author_id": 6,
+		"author_name": "Albert Einstein",
+		"author_period": "",
+		"quote": {
+			"quote_id": 9,
+			"quote_text": "Logic will get you from A to Z; imagination will get you everywhere.",
+			"times_used": 0
+		}
+	},
+	"msg": "SUCCESS",
+	"status": 0
+}

@@ -1,0 +1,52 @@
+{
+	"version": "v1.01",
+	"generated": "2017-08-14 11:59:28",
+	"service": "allquotes",
+	"authors": [{
+		"author_id": 1,
+		"author_name": "Baltasar Gracian",
+		"author_period": "",
+		"quotes": [{
+			"quote_id": 1,
+			"quote_text": "Dreams will get you nowhere, a good kick in the pants will take you a long way.",
+			"times_used": 0
+		}]
+	}, {
+		"author_id": 4,
+		"author_name": "Marcus Aurelius",
+		"author_period": "",
+		"quotes": [{
+			"quote_id": 4,
+			"quote_text": "The art of living is more like wrestling than dancing.",
+			"times_used": 1
+		}]
+	}, {
+		"author_id": 5,
+		"author_name": "George Carlin",
+		"author_period": "",
+		"quotes": [{
+			"quote_id": 5,
+			"quote_text": "If it's true that our species is alone in the universe, then I'd have to say the universe aimed rather low and settled for very little.",
+			"times_used": 1
+		}]
+	}, {
+		"author_id": 6,
+		"author_name": "Albert Einstein",
+		"author_period": "",
+		"quotes": [{
+			"quote_id": 6,
+			"quote_text": "We all know that light travels faster than sound. That's why certain people appear bright until you hear them speak.",
+			"times_used": 0
+		}, {
+			"quote_id": 15,
+			"quote_text": "The world as we have created it is a process of our thinking. It cannot be changed without changing our thinking.",
+			"times_used": 0
+		}, {
+			"quote_id": 18,
+			"quote_text": "Gravitation is not responsible for people falling in love.",
+			"times_used": 0
+		}]
+	}],
+	"msg": "SUCCESS",
+	"status": 0
+}
