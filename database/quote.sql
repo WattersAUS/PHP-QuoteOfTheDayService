@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 10.169.0.145
--- Generation Time: Sep 06, 2017 at 04:38 PM
+-- Generation Time: Sep 19, 2017 at 05:17 PM
 -- Server version: 5.7.17
 -- PHP Version: 5.3.3
 
@@ -19,6 +19,33 @@ SET time_zone = "+00:00";
 --
 -- Database: `shinyide2_quotes`
 --
+
+DELIMITER $$
+--
+-- Functions
+--
+CREATE DEFINER=`shinyide2_user`@`%` FUNCTION `plaintext`( input VARCHAR(512) ) RETURNS varchar(512) CHARSET utf8
+BEGIN
+    DECLARE pos SMALLINT DEFAULT 1; 
+    DECLARE len SMALLINT DEFAULT 1;
+    DECLARE output VARCHAR(512) DEFAULT '';
+    DECLARE ch CHAR(1);
+    SET len = CHAR_LENGTH( input );
+    REPEAT
+        BEGIN
+            SET ch = MID( input, pos, 1 );
+            IF ch REGEXP '[[:alnum:]]' THEN
+                IF ch <> ' ' THEN
+                    SET output = CONCAT(output, ch);
+                END IF;
+            END IF;
+            SET pos = pos + 1;
+        END;
+    UNTIL pos > len END REPEAT;
+    RETURN LOWER(output);
+END$$
+
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -67,6 +94,17 @@ CREATE TABLE IF NOT EXISTS `author` (
   `added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Triggers `author`
+--
+DELIMITER $$
+CREATE TRIGGER `insert_author_before` BEFORE INSERT ON `author`
+ FOR EACH ROW BEGIN
+        SET NEW.match_text = plaintext(NEW.name);
+    END
+$$
+DELIMITER ;
+
 -- --------------------------------------------------------
 
 --
@@ -79,6 +117,7 @@ CREATE TABLE IF NOT EXISTS `quote` (
   `quote_text` varchar(512) DEFAULT NULL,
   `match_text` varchar(512) DEFAULT NULL,
   `times_used` int(11) NOT NULL DEFAULT '0',
+  `last_used_by` int(11) NOT NULL DEFAULT '0',
   `added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -89,6 +128,13 @@ DELIMITER $$
 CREATE TRIGGER `insert_quote_after` AFTER INSERT ON `quote`
  FOR EACH ROW BEGIN
         INSERT INTO quote_access (access_ident,quote_id) SELECT a.ident, NEW.id FROM access a;
+    END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `insert_quote_before` BEFORE INSERT ON `quote`
+ FOR EACH ROW BEGIN
+        SET NEW.match_text = plaintext(NEW.quote_text);
     END
 $$
 DELIMITER ;
