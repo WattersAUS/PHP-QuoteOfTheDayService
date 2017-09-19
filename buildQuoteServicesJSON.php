@@ -9,12 +9,13 @@
 // 2017-08-11 v0.01   First cut of code
 // 2017-08-12 v1.00   First release with Random Quote function
 // 2017-08-13 v1.01   Return table_ in field names for differentiation
+// 2017-09-13 v1.02   Added getAllQuotesForAuthor
 //
 
     require_once("common.php");
     require_once("sqlquote.php");
 
-    $version = "v1.01";
+    $version = "v1.02";
 
 //
 // base arrays author/quote
@@ -90,6 +91,27 @@
         return $json;
     }
 
+    function getAllQuotesForAuthorJSON($db, $author) {
+        if (!$authors = $db->query(getSelectedActiveAuthorSQL($author))) {
+            throw new Exception("Unable to retrieve authors quotes");
+        }
+        $json = [];
+        if ($author = $authors->fetch_array(MYSQLI_ASSOC)) {
+            $authorJson = buildAuthorsJSONContents($author);
+            if (!$quotes = $db->query(getQuoteSQL().setAuthorIDInQuoteSQL($author["author_id"]))) {
+                throw new Exception("Unable to retrieve quotes for author");
+            }
+            debugMessage("Adding quotes for author (".$author["author_name"].") to results...");
+            $quoteJson = [];
+            while ($quote = $quotes->fetch_array(MYSQLI_ASSOC)) {
+                $quoteJson[] = buildQuoteJSONContents($quote);
+            }
+            $authorJson["quotes"] = $quoteJson;
+            $json[] = $authorJson;
+        }
+        return $json;
+    }
+
     function getAllQuotesJSON($db) {
         if (!$authors = $db->query(getActiveAuthorsSQL())) {
             throw new Exception("Unable to retrieve all quotes");
@@ -111,10 +133,9 @@
         return $json;
     }
 
-    //
+    //--------------------------------------------------------------------------
     // services call the appropriate func here
-    //
-
+    //--------------------------------------------------------------------------
     //
     // all authors that have a least one active quote
     //
@@ -137,6 +158,29 @@
             $outputArray["generated"]  = getGeneratedDateTime();
             $outputArray["service"]    = "activeauthors";
             $outputArray["authors"]    = $json;
+            $outputArray["msg"]        = "SUCCESS";
+            $outputArray["status"]     = 0;
+        } catch (Exception $e) {
+            $outputArray["msg"]        = "ERROR: ".$e->getMessage();
+            $outputArray["status"]     = 999;
+        }
+        return json_encode($outputArray, JSON_NUMERIC_CHECK);
+    }
+
+    //
+    // all quotes for a selected active author
+    //
+    function buildAllQuotesForAuthorJSON($db, $author) {
+        try {
+            debugMessage("Processing all quotes for selected active author...");
+            $outputArray["version"]    = $GLOBALS['version'];
+            $outputArray["generated"]  = getGeneratedDateTime();
+            $outputArray["service"]    = "authorsquotes";
+            $resultArray               = getAllQuotesForAuthorJSON($db, $author);
+            if (empty($resultArray)) {
+                return json_encode(array("status" => ACTIVEAUTHORNOTFOUND, "msg" => serviceErrorMessage(ACTIVEAUTHORNOTFOUND)), JSON_NUMERIC_CHECK);
+            }
+            $outputArray["authors"]    = $resultArray;
             $outputArray["msg"]        = "SUCCESS";
             $outputArray["status"]     = 0;
         } catch (Exception $e) {

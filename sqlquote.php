@@ -7,6 +7,7 @@
 // Date       Version Note
 // ========== ======= ================================================
 // 2017-08-11 v0.01   First cut of code
+// 2017-09-13 v0.02   Added functions to support getAllQuotesForAuthor
 //
 
 function getAuthorSQL() {
@@ -34,12 +35,16 @@ function getActiveAuthorsSQL() {
     return getAuthorSQL().setQuotesExistForAuthorSQL();
 }
 
-function setAuthorIDInQuoteSQL($author_id) {
-    return " WHERE qu.author_id = ".$author_id;
+function setAuthorIDInAuthorSQL($author_id) {
+    return " AND au.id = ".$author_id;
 }
 
-function getAuthorQuotesSQL($author_id) {
-    return getQuoteSQL().setAuthorIDInQuoteSQL($author_id);
+function getSelectedActiveAuthorSQL($author_id) {
+    return getAuthorSQL().setQuotesExistForAuthorSQL().setAuthorIDInAuthorSQL($author_id);
+}
+
+function setAuthorIDInQuoteSQL($author_id) {
+    return " WHERE qu.author_id = ".$author_id;
 }
 
 function getLeastTimesUsedSQL() {

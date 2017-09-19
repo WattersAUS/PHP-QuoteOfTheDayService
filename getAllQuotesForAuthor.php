@@ -1,12 +1,12 @@
 <?php
 //
-// Program: getQuotesFromAuthor.php (2017-08-11) G.J. Watson
+// Program: getAllQuotesForAuthor.php (2017-09-13) G.J. Watson
 //
 // Purpose: Return JSON containing all quotes from an author
 //
 // Date       Version Note
 // ========== ======= ====================================================
-// 2017-08-11 v0.01   First cut of code
+// 2017-09-13 v0.01   First cut of code
 //
 
     set_include_path("<LIB GOES HERE>");
@@ -31,26 +31,15 @@
             if ($id < 0) {
                 $json = json_encode(array("status" => $id, "msg" => serviceErrorMessage($id)), JSON_NUMERIC_CHECK);
             } else {
-
-
-
-
                 //
-                // if we've been supplied a value for the author, validate it!
+                // if we've been supplied an author, validate it!
                 //
                 if (!isset($author) || !is_numeric($author)) {
-                    debugMessage("Author ID either not supplied, or not numeric...");
-                    $drawLimit = 50;
+                    $json = json_encode(array("status" => ILLEGALAUTHORID, "msg" => serviceErrorMessage(ILLEGALAUTHORID)), JSON_NUMERIC_CHECK);
+                } else {
+                    $json = buildAllQuotesForAuthorJSON($server, $author);
+                    logRequest($server, $_SERVER['REMOTE_ADDR'], $id);
                 }
-
-
-
-                $json = buildActiveAuthorsJSON($server);
-                logRequest($server, $_SERVER['REMOTE_ADDR'], $id);
-
-
-
-
             }
             $server->close();
         } catch (Exception $e) {
