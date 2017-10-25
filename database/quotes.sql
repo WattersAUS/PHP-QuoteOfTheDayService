@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 10.169.0.145
--- Generation Time: Sep 19, 2017 at 05:17 PM
+-- Generation Time: Oct 16, 2017 at 12:17 PM
 -- Server version: 5.7.17
 -- PHP Version: 5.3.3
 
@@ -24,6 +24,26 @@ DELIMITER $$
 --
 -- Functions
 --
+CREATE DEFINER=`shinyide2_user`@`%` FUNCTION `addquote`( author_name VARCHAR(128), quote_body VARCHAR(512) ) RETURNS int(11)
+BEGIN
+    DECLARE aid INT DEFAULT 0;
+    DECLARE qid INT DEFAULT 0;
+    DECLARE ret INT DEFAULT 0;
+    SELECT id INTO qid FROM quote WHERE match_text = plaintext(quote_body);
+    IF FOUND_ROWS() = 0 THEN
+        SELECT id INTO aid FROM author WHERE match_text = plaintext(author_name);
+        IF FOUND_ROWS() = 0 THEN
+            INSERT INTO author (name, period) VALUES (author_name, '');
+            INSERT INTO quote (author_id, quote_text) VALUES (LAST_INSERT_ID(), quote_body);
+            SET ret = 3;
+        ELSE
+            INSERT INTO quote (author_id, quote_text) VALUES (aid, quote_body);
+            SET ret = 1;
+        END IF;
+    END IF;
+    RETURN ret;
+END$$
+
 CREATE DEFINER=`shinyide2_user`@`%` FUNCTION `plaintext`( input VARCHAR(512) ) RETURNS varchar(512) CHARSET utf8
 BEGIN
     DECLARE pos SMALLINT DEFAULT 1; 
@@ -186,7 +206,8 @@ ALTER TABLE `author`
 -- Indexes for table `quote`
 --
 ALTER TABLE `quote`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `quote_match_text_idx` (`match_text`) USING BTREE;
 
 --
 -- Indexes for table `quote_access`
