@@ -2,8 +2,8 @@
 -- version 4.4.10
 -- http://www.phpmyadmin.net
 --
--- Host: 10.169.0.145
--- Generation Time: Oct 16, 2017 at 12:17 PM
+-- Host: n/a
+-- Generation Time: Nov 14, 2017 at 02:29 PM
 -- Server version: 5.7.17
 -- PHP Version: 5.3.3
 
@@ -46,7 +46,7 @@ END$$
 
 CREATE DEFINER=`shinyide2_user`@`%` FUNCTION `plaintext`( input VARCHAR(512) ) RETURNS varchar(512) CHARSET utf8
 BEGIN
-    DECLARE pos SMALLINT DEFAULT 1; 
+    DECLARE pos SMALLINT DEFAULT 1;
     DECLARE len SMALLINT DEFAULT 1;
     DECLARE output VARCHAR(512) DEFAULT '';
     DECLARE ch CHAR(1);
@@ -77,6 +77,8 @@ CREATE TABLE IF NOT EXISTS `access` (
   `ident` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `token` char(36) NOT NULL,
+  `requests_per_period` int(11) NOT NULL DEFAULT '0',
+  `time_period` int(11) NOT NULL DEFAULT '0',
   `created_when` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `last_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `end_dated` timestamp NULL DEFAULT NULL
