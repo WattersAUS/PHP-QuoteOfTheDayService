@@ -10,12 +10,14 @@
 // 2017-08-12 v1.00   First release with Random Quote function
 // 2017-08-13 v1.01   Return table_ in field names for differentiation
 // 2017-09-13 v1.02   Added getAllQuotesForAuthor
+// 2017-11-29 v1.03   Moved JSON builders to lib file
 //
 
     require_once("common.php");
     require_once("sqlquote.php");
+    require_once("jsonQuote.php");
 
-    $version = "v1.02";
+    $version = "v1.03";
 
 //
 // base arrays author/quote
@@ -23,18 +25,12 @@
 
     function buildAuthorsJSONContents($item) {
         debugMessage("Process info for author (".$item["author_name"].")...");
-        $authorInfo["author_id"]     = $item["author_id"];
-        $authorInfo["author_name"]   = $item["author_name"];
-        $authorInfo["author_period"] = $item["author_period"];
-        return $authorInfo;
+        return buildAuthorsJSON($item, 0);
     }
 
     function buildQuoteJSONContents($item) {
         debugMessage("Process quote for author (".$item["author_name"].")...");
-        $quoteInfo["quote_id"]   = $item["quote_id"];
-        $quoteInfo["quote_text"] = $item["quote_text"];
-        $quoteInfo["times_used"] = $item["times_used"];
-        return $quoteInfo;
+        return buildQuoteJSON($item, 0);
     }
 
 //
