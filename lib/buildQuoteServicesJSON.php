@@ -118,7 +118,7 @@
             if (!$quotes = $db->query(getQuoteSQL().setAuthorIDInQuoteSQL($author["author_id"]))) {
                 throw new Exception("Unable to retrieve quotes for author");
             }
-            debugMessage("Adding quotes for author (".$row["author_name"].") to results...");
+            debugMessage("Adding quotes for author (".$author["author_name"].") to results...");
             $quoteJson = [];
             while ($quote = $quotes->fetch_array(MYSQLI_ASSOC)) {
                 $quoteJson[] = buildQuoteJSONContents($quote);
