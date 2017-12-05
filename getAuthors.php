@@ -18,8 +18,9 @@
     require_once("buildQuoteServicesJSON.php");
     require_once("logRequest.php");
 
+    $debug = FALSE;
+
     function processAuthorsServiceRequest($token) {
-        $debug = TRUE;
         try {
             debugMessage("Commencing ".basename(__FILE__)." ".$GLOBALS['version']."...");
             $server = new mysqli($GLOBALS['hostname'], $GLOBALS['username'], $GLOBALS['password'], $GLOBALS['database']);
@@ -31,7 +32,7 @@
             if ($id < 0) {
                 $json = json_encode(array("status" => $id, "msg" => serviceErrorMessage($id)), JSON_NUMERIC_CHECK);
             } else {
-                $json = buildQuoteAuthorsJSON($server);
+                $json = buildActiveAuthorsJSON($server);
                 logRequest($server, $_SERVER['REMOTE_ADDR'], $id);
             }
             $server->close();
