@@ -18,8 +18,9 @@
     require_once("buildQuoteServicesJSON.php");
     require_once("logRequest.php");
 
+    $debug = FALSE;
+
     function processAuthorsServiceRequest($token, $author) {
-        $debug = TRUE;
         try {
             debugMessage("Commencing ".basename(__FILE__)." ".$GLOBALS['version']."...");
             $server = new mysqli($GLOBALS['hostname'], $GLOBALS['username'], $GLOBALS['password'], $GLOBALS['database']);
